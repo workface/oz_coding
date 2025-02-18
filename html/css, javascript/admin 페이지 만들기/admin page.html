@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <title>Admin Page</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: white;
+    }
+
+    .container {
+      margin-top: 20px;
+    }
+
+    .dark-mode-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background-color: #f39c12;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .dark-mode-btn i {
+      color: white;
+    }
+
+    .signup-btn {
+      position: absolute;
+      top: 80px;
+      right: 20px;
+      background-color: #3498db;
+      border: none;
+      padding: 10px;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .button-group label {
+      font-size: 14px;
+      margin-right: 8px;
+    }
+
+    .button-group select, .button-group input, .button-group button {
+      margin-right: 10px;
+    }
+
+    .button-group div {
+      flex-grow: 1;
+      max-width: 250px;
+    }
+
+    .table {
+      margin-top: 30px;
+      border: 1px solid #ddd;
+    }
+
+    .table th, .table td {
+      padding: 10px;
+      text-align: center;
+    }
+
+    .table th {
+      background-color: #f8f9fa;
+    }
+
+    .pagination {
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .pagination .page-link {
+      background-color: #f1f1f1;
+      color: #333;
+    }
+
+    .pagination .page-item.active .page-link {
+      background-color: #007bff;
+      color: white;
+    }
+
+    /* 모바일에서 더욱 깔끔하게 보이도록 */
+    @media (max-width: 768px) {
+      .button-group {
+        flex-direction: column;
+      }
+
+      .button-group select, .button-group input, .button-group button {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .signup-btn {
+        position: static;
+        margin-top: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-3">
+    <h3 class="mt-5 mb-3">신규 등록 상품</h3>
+    <form class="row row-cols-lg-auto g-3 align-items-center">      
+      <div class="col-12">
+        <label class="visually-hidden" for="inlineFormSelectPref">Preference</label>
+        <select class="form-select" id="inlineFormSelectPref" name="category_data_table">
+          <!-- 셀렉트요소의 name="category_data_table"은 지우거나 변경하면 안돼요 -->
+          <!-- 카테고리 셀렉트 코드를 넣어주세요 -->
+           <option selected>Category</option>
+           <option value="top">상의</option>
+           <option value="pants">하의</option>
+           <option value="shoes">신발</option>
+           <option value="goods">패션잡화</option>    
+        </select>
+      </div>
+      <div class="col-3">
+        <!-- input 입력창 코드를 넣어주세요 -->
+        <input type="text" class="form-control" placeholder="제품명을 입력해주세요" id="productNameInput">
+      </div>
+      <div class="col-auto">
+        <!-- 조회 버튼 코드를 넣어주세요 -->
+        <button type="button" class="btn btn-dark">조회</button>
+      </div>
+    </form>
+
+    <div class="container mt-3">
+      <table class="table table-sm">
+        <thead>
+          <!-- 열의 속성값을 나타내는 코드를 작성해주세요 (예 : 카테고리, 브랜드, 상품명, 가격) -->
+           <tr>
+            <th>Cartegory</th>
+            <th>Brand</th>
+            <th>Product Name</th>
+            <th>Price</th>
+           </tr>
+        </thead>
+        <tbody id="product_data_Table">
+          <!-- tbody요소의 id="product_data_Table" 는 지우거나 변경하면 안돼요! -->
+          <!-- 제품 데이터가 여기 추가됩니다. -->
+        </tbody>
+      </table>
+    </div>
+
+<!-- 현재 날짜와 시간 -->
+<div id="dateTime" class="dateTime-style"></div>
+
+<style>
+.dateTime-style {
+    position: fixed; /* 화면에 고정 */
+    top: 0; /* 최상단 배치 */
+    left: 50%; /* 가운데 정렬 기준 */
+    transform: translateX(-50%); /* 정확한 중앙 정렬 */
+    background: rgba(0, 0, 0, 0.7); /* 반투명 배경 */
+    color: white; /* 흰색 글씨 */
+    padding: 10px 20px; /* 내부 여백 */
+    border-radius: 5px; /* 모서리 둥글게 */
+    font-size: 18px; /* 글씨 크기 */
+    font-weight: bold; /* 글씨 두껍게 */
+}
+</style>
+
+<script>
+function updateDateTime() {
+    const now = new Date();
+    const formattedDate = now.toLocaleString(); // 현재 날짜와 시간 포맷
+    document.getElementById('dateTime').textContent = formattedDate;
+}
+
+// 1초마다 업데이트
+setInterval(updateDateTime, 1000);
+
+// 페이지 로드 시 즉시 실행
+updateDateTime();
+</script>
+    
+ <!-- 페이지 네이션 -->
+ <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+</div>
+
+<!-- 다크 모드 토글 버튼 -->
+<button class="dark-mode-btn" onclick="toggleDarkMode()" id="darkModeBtn">
+  <i class="fas fa-sun" id="darkModeIcon">다크모드</i>
+</button>
+
+<!-- 회원가입 버튼 -->
+<button class="signup-btn" onclick="showSignupModal()">회원가입</button>
+
+<!-- 회원가입 모달 -->
+<div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="signupModalLabel">회원가입</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="signupForm">
+          <div class="mb-3">
+            <label for="userId" class="form-label">아이디</label>
+            <input type="text" class="form-control" id="userId" required>
+          </div>
+          <div class="mb-3">
+            <label for="password" class="form-label">비밀번호</label>
+            <input type="password" class="form-control" id="password" required>
+          </div>
+          <div class="mb-3">
+            <label for="confirmPassword" class="form-label">비밀번호 확인</label>
+            <input type="password" class="form-control" id="confirmPassword" required>
+          </div>
+          <div class="mb-3">
+            <label for="name" class="form-label">이름</label>
+            <input type="text" class="form-control" id="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="phoneNumber" class="form-label">전화번호</label>
+            <input type="tel" class="form-control" id="phoneNumber" required>
+          </div>
+          <div class="mb-3">
+            <label for="gender" class="form-label">성별</label>
+            <select class="form-select" id="gender" required>
+              <option value="남성">남성</option>
+              <option value="여성">여성</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="email" class="form-label">이메일</label>
+            <input type="email" class="form-control" id="email" required>
+          </div>
+          <button type="submit" class="btn btn-success">회원가입</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 회원가입 완료 메시지 -->
+<div class="modal" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">회원가입 완료</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p> 축하드립니다! 회원가입이 완료되었습니다.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    // 크롤링한 데이터를 아래와 같은 형태의 객체 배열로 가정합니다.
+    // 추후 데이터베이스에 있는 데이터를 쿼리문으로 불러 올 수 있게 쿼리를 작성해 볼 수 있음
+
+    // 제품 데이터
+    const product_data = [
+      { category: "상의", brand: 'Supreme', product: '슈프림 박스로고 후드티', price: '390,000' },
+      { category: "하의", brand: 'DIESEL', product: '디젤 트랙 팬츠', price: '188,000' },
+      { category: "신발", brand: 'Nike', product: '에어포스 1', price: '137,000' },
+      { category: "패션잡화", brand: 'Music&Goods', product: '빵빵이 키링', price: '29,000' },
+      { category: "상의", brand: 'POLO Ralph Lauren', product: 'RL플리스 후드티셔츠', price: '239,000' },
+      { category: "하의", brand: 'POLO Ralph Lauren', product: '드로스트일 테리 팬츠', price: '239,000' },
+      { category: "신발", brand: 'New Balance', product: '740bm', price: '139,000' },
+      { category: "상의", brand: 'Tommy Jeans', product: '투웨이 울 하이넥업 풀집가디건', price: '179,000' },
+      { category: "하의", brand: 'Tommy Jeans', product: '스케이터 카펜터 배기핏 데님', price: '215,000' },
+      { category: "신발", brand: 'New Balance', product: '740in', price: '149,000' },
+      { category: "패션잡화", brand: 'Chrome Hearts', product: '크로스펜던트', price: '749,000' },
+      { category: "패션잡화", brand: 'Chrome Hearts', product: '포어베링 스페이스', price: '810,000' },
+      { category: "상의", brand: 'POLO Ralph Lauren', product: '크루넥 RL 울 스웨터', price: '799,000' },
+      { category: "하의", brand: 'Nike', product: '헤비 기모팬츠', price: '149,000' },
+      { category: "신발", brand: 'New Balance', product: '993', price: '355,000' },
+      { category: "패션잡화", brand: 'Chrome Hearts', product: '크롬하츠 플러스 링 반지', price: '1,590,000' }
+      // ...
+    ];
+
+    // 제품 테이블에 데이터 추가
+    const product_data_Table = document.getElementById('product_data_Table');
+
+    // 초기 데이터 로딩
+    product_data.forEach((item) => {
+      const row = product_data_Table.insertRow();
+      row.insertCell(0).innerHTML = item.category;
+      row.insertCell(1).innerHTML = item.brand;
+      row.insertCell(2).innerHTML = item.product;
+      row.insertCell(3).innerHTML = item.price;
+    });
+
+    // 카테고리 및 제품 필터링
+    function filterProducts() {
+      const category = document.getElementById('categorySelect').value;
+      const productName = document.getElementById('productNameInput').value.toLowerCase();
+
+      const filteredData = product_data.filter(item =>
+        item.category === category && item.product.toLowerCase().includes(productName)
+      );
+
+      const product_data_Table = document.getElementById('product_data_Table');
+      product_data_Table.innerHTML = '';
+
+      filteredData.forEach(item => {
+        const row = product_data_Table.insertRow();
+        row.insertCell(0).innerHTML = item.category;
+        row.insertCell(1).innerHTML = item.brand;
+        row.insertCell(2).innerHTML = item.product;
+        row.insertCell(3).innerHTML = item.price;
+      });
+    }
+
+    // 다크 모드 토글
+    function toggleDarkMode() {
+      const body = document.body;
+      body.classList.toggle('dark-mode');
+      const icon = document.getElementById('darkModeIcon');
+      icon.classList.toggle('fa-sun');
+      icon.classList.toggle('fa-moon');
+    }
+
+    // 회원가입 모달 표시
+    function showSignupModal() {
+      const signupModal = new bootstrap.Modal(document.getElementById('signupModal'));
+      signupModal.show();
+    }
+
+    // 회원가입 완료 후 메시지 표시
+    const signupForm = document.getElementById('signupForm');
+    signupForm.addEventListener('submit', function(event) {
+      event.preventDefault(); // 폼 제출 막기
+
+      // 회원가입 완료 메시지 모달 표시
+      const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+      successModal.show();
+
+      // 회원가입 완료 후 모달 닫기
+      const signupModal = bootstrap.Modal.getInstance(document.getElementById('signupModal'));
+      signupModal.hide();
+    });
+
+    // 현재 날짜와 시간 표시
+    function showDateTime() {
+      const now = new Date();
+      const dateTimeElement = document.getElementById('dateTime');
+      dateTimeElement.innerHTML = `${now.toLocaleDateString()} ${now.toLocaleTimeString()}`;
+    }
+
+    // 페이지 로드 시 날짜와 시간 표시
+    window.onload = function() {
+      showDateTime();
+    };   
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
