@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>{{ user.이름 }}</h1>
+    <hr>
+    <p>
+        {% for key, value in user.items %}
+            {{ key }}
+            {{ value }}<br>
+        {% endfor %}
+    </p>
+</body>
+</html>
