@@ -27,8 +27,8 @@ def user_list(request):
     return render(request, template_name='user_list.html', context={'users': users})
 
 def user_info(request, user_id):
-    # if user_id != db.user_id:
-    #     raise Http404
+    if user_id < 1 or user_id > 5 :
+        raise Http404('Users not found')
     user = db[user_id]
     context = {'user': user}
     return render(request, 'user_info.html', context)
